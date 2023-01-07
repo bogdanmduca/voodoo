@@ -1,6 +1,7 @@
 <?php
 
-use App\Jobs\LogRandomUser;
+use App\Http\Controllers\LoggedUserController;
+use App\Jobs\LogRandomUserJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('logged-users', function () {
 
-    LogRandomUser::dispatch();
+    LogRandomUserJob::dispatch();
 
     return response()->json('Job Dispatched', 201);
 });
+
+Route::get('v2/logged-users', LoggedUserController::class);

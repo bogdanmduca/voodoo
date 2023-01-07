@@ -2,8 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Actions\GetRandomUserAction;
 use App\Actions\LogRandomUserAction;
-use App\Jobs\LogRandomUser as JobsLogRandomUser;
+use App\Jobs\LogRandomUserJob;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Log;
@@ -13,27 +14,31 @@ class LogRandomUserTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        User::factory()->create();
+    }
+
     public function test_an_action_logs_random_user_details()
     {
-        User::factory()->create();
+        $this->assertLogged();
 
-        Log::shouldReceive('info')
-            ->once()
-            ->withArgs(
-                [
-                    'Random user: '  . json_encode(User::first())
-                ]
-            );
-
-        $action = new LogRandomUserAction();
+        $action = new LogRandomUserAction(new GetRandomUserAction());
 
         $action->handle();
     }
 
     public function test_a_job_logs_random_user_details()
     {
-        User::factory()->create();
+        $this->assertLogged();
 
+        (new LogRandomUserJob)->handle();
+    }
+
+    protected function assertLogged()
+    {
         Log::shouldReceive('info')
             ->once()
             ->withArgs(
@@ -41,9 +46,5 @@ class LogRandomUserTest extends TestCase
                     'Random user: '  . json_encode(User::first())
                 ]
             );
-
-        $action = new JobsLogRandomUser();
-
-        $action->handle();
     }
 }

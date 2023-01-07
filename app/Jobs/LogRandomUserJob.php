@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class LogRandomUser implements ShouldQueue
+class LogRandomUserJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -28,10 +28,8 @@ class LogRandomUser implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        $action = new LogRandomUserAction();
-
-        $action->handle();
+        app(LogRandomUserAction::class)->handle();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Jobs\LogRandomUser;
+use App\Jobs\LogRandomUserJob;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
@@ -22,6 +22,6 @@ class LogRandomUserCommandTest extends TestCase
             ->expectsOutput("Job dispatched to log random user")
             ->assertExitCode(0);
 
-        Queue::assertPushed(LogRandomUser::class, 1);
+        Queue::assertPushed(LogRandomUserJob::class, 1);
     }
 }

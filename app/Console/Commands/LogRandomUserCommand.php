@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\LogRandomUser;
+use App\Jobs\LogRandomUserJob;
 use Illuminate\Console\Command;
 
 class LogRandomUserCommand extends Command
@@ -26,9 +26,9 @@ class LogRandomUserCommand extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
-        dispatch(new LogRandomUser);
+        dispatch(new LogRandomUserJob);
 
         $this->info('Job dispatched to log random user');
 

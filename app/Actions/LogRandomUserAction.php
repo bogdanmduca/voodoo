@@ -7,12 +7,18 @@ use Illuminate\Support\Facades\Log;
 
 class LogRandomUserAction
 {
-    public function handle()
+    protected $messagePrefix  = 'Random user: ';
+
+    public function __construct(protected GetRandomUserAction $getRandomUserAction)
+    {
+    }
+
+    public function handle(): void
     {
         Log::info(
-            'Random user: ' .
+            $this->messagePrefix .
                 json_encode(
-                    User::inRandomOrder()->first()
+                    $this->getRandomUserAction->handle()
                 ),
         );
     }
